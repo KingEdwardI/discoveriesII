@@ -1,3 +1,4 @@
+#!/local/bin/python
 import json
 import sys
 
@@ -8,9 +9,14 @@ def main():
     #  sortJSON(orderJSON)
     #  makeOrder(orderJSON)
     #  print getOrderNums(orderJSON)
-    makeOrderHeader(arabicImageLinks, orderJSON)
+    #  makeOrderHeader(arabicImageLinks, orderJSON)
     #  makeHTML(orderJSON)
     #  insertArabic(arabicImageLinks, orderJSON)
+    #  makeSymbolTableOne(orderJSON)
+    #  makeSymbolTableTwo(orderJSON)
+    #  makeSize(arabicImageLinks, orderJSON)
+    #  makeItemDescription(orderJSON)
+    makeOneSided(arabicImageLinks, orderJSON)
 
 
 def getOrderNums(json):
@@ -20,8 +26,8 @@ def getOrderNums(json):
     orderNum = []
     batchNum = ''
     for item in json:
-        if not any(item['itemNum'] in i for i in itemDescription):
-            itemDescription.append(item['itemNum'] + " | " + item['metal'] + " " + item['type'] + " " + item['attr1'] + " " + item['attr2'])
+        if not any(item['itemSort'] in i for i in itemDescription):
+            itemDescription.append(item['itemSort'] + " | " + item['metal'] + " " + item['type'] + " " + item['attr1'] + " " + item['attr2'])
             arabicDescription.append(item['metal'] + " | " + item['type'] + " | " + item['attr1'] + " | " + item['attr2'])
             orderNum.append(item['itemNum'])
             batchNum = (item['batchNum'])
@@ -63,8 +69,8 @@ def makeOrderHeader(arabic, json):
         content += "<span class='batchNumber'>" + batchNum + "</span>"
         content += "</div>"
         orderTitle.append(content)
-    for i in orderTitle:
-        print i, '\n'
+
+    return orderTitle
 
 def makeHTML(json):
     """build out the whole html page"""
@@ -85,9 +91,110 @@ def test():
     html += '<div class="orderItem"><table class="item"><tbody><tr><td class="symbol">A</td></tr><tr><td class="symbol">B</td></tr><tr><td class="symbol">C</td></tr><tr><td class="symbol">D</td></tr><tr><td class="symbol">E</td></tr></tbody></table><div class="size">4</div><div class="itemDesc">CSOA<br>sig -EDDIE<br> 8583958390</div></div>'
     print html
 
-def makeOneSided(json):
+def makeSymbolTableOne(json):
+
+    symbolTablesOne = []
+
+    for item in json:
+        if item['type'] != 'ring' and item['type'] != 'bracelet' and item['attr1'] != '2sided': 
+            symbolTable = ''
+            symbolTable += '<table class="itemSymbols"><tbody>'
+            for letter in item['side1symb']:
+                symbolTable += '<tr><td class="symbol ' + item['side1lang'] + '">' + letter + '</td></tr>'
+
+            symbolTable += '</tbody></table>'
+            symbolTablesOne.append(symbolTable)
+
+    return symbolTablesOne
+
+def makeSymbolTableTwo(json):
+
+    symbolTablesTwo = []
+    for item in json:
+        if item['type'] != 'ring' and item['type'] != 'bracelet' and item['attr1'] == '2sided': 
+            symbolTable = ''
+            symbolTable += '<table class="itemSymbols"><tbody>'
+            for side1, side2 in zip(item['side1symb'], item['side2symb']):
+                symbolTable += '<tr><td class="side1 symbol ' + item['side1lang'] + '">' + side1 + '</td>'
+                symbolTable += '<td class="side2 symbol ' + item['side2lang'] + '">' + side2 + '</td></tr>'
+            symbolTable += '</tbody></table>'
+        symbolTablesTwo.append(symbolTable)
+    return symbolTablesTwo
+        
+def makeSize(arabic, json):
+
+    sizesOneSided = []
+    sizesTwoSided = []
+    sizesBand = []
+    for item in json:
+        if item['attr1'] != '2sided' and item['type'] != 'ring' and item['type'] != 'bracelet':
+            sizeDiv = ''
+            for size in arabic:
+                if size == item['size'] :
+                    sizeDiv += '<div class="size arabic"><img src="' + arabic[size] + '"></div>'
+                    sizesOneSided.append(sizeDiv)
+        elif item['attr1'] == '2sided' and item['type'] != 'ring' and item['type'] != 'bracelet':
+            sizeDiv = ''
+            for size in arabic:
+                if size == item['size'] :
+                    sizeDiv += '<div class="size arabic"><img src="' + arabic[size] + '"></div>'
+                    sizesTwoSided.append(sizeDiv)
+        elif item['type'] == 'ring' or item['type'] == 'bracelet':
+            sizeDiv = ''
+            for size in arabic:
+                if size == item['size'] :
+                    sizeDiv += '<div class="size arabic"><img src="' + arabic[size] + '"></div>'
+                    sizesBand.append(sizeDiv)
+                    
+    return sizesOneSided, sizesTwoSided, sizesBand
+
+def makeItemDescription(json):
+
+    oneSidedDescription = []
+    twoSidedDescription = []
+    bandDescription = []
+
+    for item in json:
+        if item['attr1'] != '2sided' and item['type'] != 'ring' and item['type'] != 'bracelet':
+            itemDiv = ''
+            itemDiv += '<div class="itemDescription">'
+            itemDiv += item['itemNum'] + '<br>'
+            itemDiv += 'SIG -' + item['label'] + '<br>'
+            itemDiv += str(item['orderNum']) + '<br>'
+            itemDiv += '</div>'
+            oneSidedDescription.append(itemDiv)
+        elif item['attr1'] == '2sided' and item['type'] != 'ring' and item['type'] != 'bracelet':
+            itemDiv = ''
+            itemDiv += '<div class="itemDescription">'
+            itemDiv += item['itemNum'] + '<br>'
+            itemDiv += 'SIG -' + item['label'] + '<br>'
+            itemDiv += str(item['orderNum']) + '<br>'
+            itemDiv += '</div>'
+            twoSidedDescription.append(itemDiv)
+        elif item['type'] == 'ring' or item['type'] == 'bracelet':
+            itemDiv = ''
+            itemDiv += '<div class="itemDescription">'
+            itemDiv += item['itemNum'] + '<br>'
+            itemDiv += 'SIG -' + item['label'] + '<br>'
+            itemDiv += str(item['orderNum']) + '<br>'
+            itemDiv += '</div>'
+            bandDescription.append(itemDiv)
+    
+    return oneSidedDescription, twoSidedDescription, bandDescription
+    
+
+def makeOneSided(arabic, json):
     #TODO
-    pass
+    orderHead = makeOrderHeader(arabic, json)
+    symbols = makeSymbolTableOne(json)
+    oneSidedSizes, twoSidedSizes, bandSizes = makeSize(arabic, json)
+    oneSidedDescription, twoSidedDescription, bandDescription = makeItemDescription(json)
+
+    print len(symbols), len(oneSidedSizes), len(oneSidedDescription), len(orderHead)
+
+    for order in orderHead:
+        oneSidedOrder = ''
+        oneSidedOrder += '<div class="fullOrder">' + order
 
 def makeTwoSided(json):
     #TODO

@@ -25,3 +25,8 @@ Components:
       symbols
       size
       item description
+
+each full order will be a div, as a wrapper
+the order description will be returned from it's builder function, and placed at the top, within the div.
+the orders will be generated from the order and the generated arabic.
+
