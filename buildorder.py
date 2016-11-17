@@ -18,17 +18,19 @@ def getOrderNums(json):
     itemDescription = []
     arabicDescription = []
     orderNum = []
+    batchNum = ''
     for item in json:
         if not any(item['itemNum'] in i for i in itemDescription):
             itemDescription.append(item['itemNum'] + " | " + item['metal'] + " " + item['type'] + " " + item['attr1'] + " " + item['attr2'])
             arabicDescription.append(item['metal'] + " | " + item['type'] + " | " + item['attr1'] + " | " + item['attr2'])
             orderNum.append(item['itemNum'])
-    return map(lambda x: x.encode('ascii'), itemDescription), map(lambda x: x.encode('ascii'), arabicDescription), map(lambda x: x.encode('ascii'), orderNum)
+            batchNum = (item['batchNum'])
+    return map(lambda x: x.encode('ascii'), itemDescription), map(lambda x: x.encode('ascii'), arabicDescription), map(lambda x: x.encode('ascii'), orderNum), batchNum
 
 def insertArabic(arabic, json):
     # TODO
     """ gets the Arabic image links and replaces whatever is provided with the link """
-    itemDescription, arabicDescription, orderNum = getOrderNums(json)
+    itemDescription, arabicDescription, orderNum, batchNum = getOrderNums(json)
 
     englishDescrip = []
     arabicDescrip = []
@@ -47,7 +49,7 @@ def insertArabic(arabic, json):
     return arabicDescrip
 
 def makeOrderHeader(arabic, json):
-    itemDescription, englishDescription, orderNum = getOrderNums(json)
+    itemDescription, englishDescription, orderNum, batchNum = getOrderNums(json)
     arabicDescription = insertArabic(arabic, json)
 
     orderTitle = []
@@ -58,6 +60,7 @@ def makeOrderHeader(arabic, json):
         content += "<span class='orderDescription'>" + detail + "</span>"
         for detail in arabicDetail:
             content += "<span class='arabic'><img src='" + detail + "'> | </span>"
+        content += "<span class='batchNumber'>" + batchNum + "</span>"
         content += "</div>"
         orderTitle.append(content)
     for i in orderTitle:
