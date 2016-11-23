@@ -255,7 +255,7 @@
         "batchNum": "D30",
         "orderNum": 123456
     }, {
-        "itemSort": "RWEDS-SG",
+        "itemSort": "RWEDS-S",
         "itemNum": "RWEDS-SG",
         "type": "ring",
         "metal": "SS/18k",
@@ -264,13 +264,13 @@
         "attr1": "",
         "attr2": "",
         "side1lang": "hiero",
-        "side1symb": "DOLORES",
+        "side1symb": "AOOUE",
         "side2lang": "",
         "side2symb": "",
-        "label": "DOLORES",
+        "label": "AOOUE",
         "customerNum": "WCJ",
         "batchNum": "D30",
-        "orderNum": 78910
+        "orderNum": 7891013
     }, {
         "itemSort": "RWEDS-SG",
         "itemNum": "RWEDS-SG",
@@ -281,13 +281,13 @@
         "attr1": "",
         "attr2": "",
         "side1lang": "hiero",
-        "side1symb": "DOLORES",
+        "side1symb": "STHRSR",
         "side2lang": "",
         "side2symb": "",
-        "label": "DOLORES",
+        "label": "STHRSR",
         "customerNum": "WCJ",
         "batchNum": "D30",
-        "orderNum": 78910
+        "orderNum": 78910124
     }, {
         "itemSort": "RWEDS-SG",
         "itemNum": "RWEDS-SG",

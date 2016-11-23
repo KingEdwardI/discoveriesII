@@ -1,0 +1,57 @@
+@font-face {
+  font-family: "heiro";
+  src: url("fonts/Hiero.ttf");
+}
+
+@font-face {
+  font-family: "astro";
+  src: url("fonts/Astro.ttf");
+}
+
+@font-face {
+  font-family: "greek";
+  src: url("fonts/greek.ttf");
+}
+
+.hiero {
+  font-family: "heiro";
+  font-size: 30px;
+}
+
+.astro {
+  font-family: "astro";
+  font-size: 30px;
+}
+
+.greek {
+  font-family: "greek";
+  font-size: 30px;
+}
+
+div.orderDescData {
+  max-height: 50px;
+}
+
+div.orderDescData:last-child {
+}
+
+span.arabic > img {
+  max-height: 50px;
+  max-width: 150px;
+}
+
+div.item {
+  float: left;
+  display: flex-inline;
+  height: 450px;
+  width: 100px;
+  border-right: 1px solid black;
+}
+
+dev.size {
+  display: inline-block;
+}
+
+dev.size > img {
+  text-align: center;
+}
