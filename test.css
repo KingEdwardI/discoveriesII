@@ -30,9 +30,7 @@
 
 div.orderDescData {
   max-height: 50px;
-}
-
-div.orderDescData:last-child {
+  margin-bottom: 10px;
 }
 
 span.arabic > img {
@@ -43,15 +41,66 @@ span.arabic > img {
 div.item {
   float: left;
   display: flex-inline;
-  height: 450px;
-  width: 100px;
+  height: 445px;
   border-right: 1px solid black;
+  margin-bottom: 20px;
 }
 
-dev.size {
-  display: inline-block;
+div.item.oneSided {
+  width: 85px;
+}
+div.item.twoSided {
+  width: 115px;
 }
 
-dev.size > img {
+div.size > img {
+  display: block;
+  margin: 0 auto;
+}
+
+div.orderDescData:last-child {
+  clear: right;
+}
+
+table.itemSymbols {
+  width: 100%;
+}
+
+td.symbol {
+  width: 30px;
+  height: 30px;
   text-align: center;
+}
+
+div.item {
+  position: relative;
+}
+
+
+div.itemDescription {
+  position: absolute;
+  bottom: 0;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+div.band {
+  height: 90px;
+  width: auto;
+}
+
+div.band > .itemSymbols {
+
+}
+
+div.band > .itemDescription {
+
+}
+div.description {
+  margin: 10px;
+}
+
+div.break {
+  clear: both;
 }
