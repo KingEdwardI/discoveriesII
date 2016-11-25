@@ -20,22 +20,24 @@ var requireDir = require('require-dir');
 var dir = requireDir('./orders', {recurse: true});
 // save html as pdf
 var pdf = require('html-pdf');
-var options = { "format" : "A4" }
+var options = { "format" : "A4" };
+// run command line programs
+var exec = require('child_process').exec;
 
 var PORT = 8000;
 
 app.post('/uploads', type,
   (req,res,next) => {
-    // unique identifier for uploaded file
-    uploadfile = req.file.filename
-    // read from csv file and convert to json
-    csvtojson.fromFile("./uploads/" + uploadfile, (err, result) => {
-      // write converted json to new file
-      fs.writeFile(__dirname + '/json/' + uploadfile + '.json', JSON.stringify(result), (err) => {
+    var uploadfile = req.file.filename; // unique identifier for uploaded file
+    var finalfile = req.file.filename; // final filename to be written
+    
+    csvtojson.fromFile("./uploads/" + uploadfile, (err, result) => { // read from csv file and convert to json
+      
+      fs.writeFile(__dirname + '/json/' + uploadfile + '.json', JSON.stringify(result), (err) => { // write converted json to new file
         if (err) {
           return console.log(err);
         }
-        // make the html file here and place in tmp/
+        exec('buildorder.py ./json/' + uploadfile + '.json ./orders/' + finalfile + '/.pdf')
 
         html = fs.readFileSync('./tmp/' + uploadfile + '/.html', 'utf8');
         pdf.create(html, options).toFile(__dirname + '/orders/' + req.file.originalname, (err,res) => {
@@ -49,6 +51,27 @@ app.post('/uploads', type,
     });
     // res.redirect('/orders');
 });
+
+/*
+ * function getDateTime() {
+ * 
+ *     var date = new Date();
+ * 
+ *     var hour = date.getHours();
+ *     hour = (hour < 10 ? "0" : "") + hour;
+ * 
+ *     var year = date.getFullYear();
+ * 
+ *     var month = date.getMonth() + 1;
+ *     month = (month < 10 ? "0" : "") + month;
+ * 
+ *     var day  = date.getDate();
+ *     day = (day < 10 ? "0" : "") + day;
+ * 
+ *     return year + ":" + month + ":" + day + ":" + hour;
+ * 
+ * }
+ */
 
 app.use(express.static(__dirname));
 app.use(express.static('orders/'));

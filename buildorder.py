@@ -19,7 +19,10 @@ def main():
 def getOrderNums(json):
     itemDescDict = {} # {itemSort : itemDesc}
     for item in json:
-        identifier = item['itemSort'].lower() + item['type'].lower() + item['attr1'].lower().replace(' ', '')
+        if any(item['type'].lower() in s for s in bandTypes):
+            identifier = "z" + item['itemSort'].lower() + item['type'].lower() + item['attr1'].lower().replace(' ', '')
+        else:
+            identifier = item['itemSort'].lower() + item['type'].lower() + item['attr1'].lower().replace(' ', '')
         if identifier not in itemDescDict:
             itemDescDict[identifier] = "<div class='orderDescData'><span class='orderDescription'>"
             itemDescDict[identifier] += item['itemSort'] + " | " + item['metal'] + " " + item['type'] + " " + item['attr1'] + " " + item['attr2'] + " | </span><span class='arabic'>" 
@@ -126,9 +129,9 @@ def makeHTML(json):
 
     html = ""
     html += boilerplate
+    x1, x2, x3 = 0, 0, 0
     for key, order in sortOrder: 
-        print key
-        if 'ring' not in key and 'bracelet' not in key and '2sided' not in key:
+        if 'ring' not in key and 'bracelet' not in key and '2sided' not in key and x1 == 0:
             html += "<div class='break'></div>"
             html += "<div class='order'>"
             html += order
@@ -140,11 +143,13 @@ def makeHTML(json):
                     html += item 
                     o += 1
             html += "</div>"
-        if 'ring' not in key and 'bracelet' not in key and '2sided' in key:
+            x1 += 1
+        if 'ring' not in key and 'bracelet' not in key and '2sided' in key and x2 == 0:
             html += "<div class='break'></div>"
             html += "<div class='order'>"
             html += order
             t = 0
+            #  print twoSideds
             for twoSided in twoSideds:
                 for item in twoSideds[twoSided]:
                     if t % 6 == 0 and t != 0:
@@ -152,16 +157,18 @@ def makeHTML(json):
                     html += item
                     t += 1
             html += "</div>"
-        if 'ring' in key or 'bracelet' in key:
+            x2 += 1
+        if 'ring' in key or 'bracelet' in key and x3 == 0:
             html += "<div class='break'></div>"
             for band in bands:
                 for item in bands[band]:
                     html += "<div class='break'<div class='order'>"
                     html += order
                     html += item
+            x3 += 1
     html += endplate
 
-    #  print html
+    print html
 
 def readJSON(filename):
     """
