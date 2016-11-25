@@ -1,9 +1,10 @@
-#!/local/bin/python
+#!/usr/bin/python
 import json
 import sys
 from unidecode import unidecode
 
 argIn = sys.argv[1]
+argOut = sys.argv[2]
 
 bandTypes = ['ring','bracelet','ring band', 'band']
 
@@ -13,7 +14,8 @@ def main():
     #  print makeOneSided(orderJSON)
     #  print makeTwoSided(orderJSON)
     #  print makeBand(orderJSON)
-    makeHTML(orderJSON)
+    #  makeHTML(orderJSON)
+    writeHTML(orderJSON)
 
 
 def getOrderNums(json):
@@ -27,13 +29,13 @@ def getOrderNums(json):
             itemDescDict[identifier] = "<div class='orderDescData'><span class='orderDescription'>"
             itemDescDict[identifier] += item['itemSort'] + " | " + item['metal'] + " " + item['type'] + " " + item['attr1'] + " " + item['attr2'] + " | </span><span class='arabic'>" 
             if item['metal']:
-                itemDescDict[identifier] += "<img src='img/" + item['metal'].lower() + ".jpg'>" 
+                itemDescDict[identifier] += "<img src='.img/" + item['metal'].lower() + ".jpg'>" 
             if item['type']:
-                itemDescDict[identifier] += "<img src='img/" + item['type'].lower() + ".jpg'>"
+                itemDescDict[identifier] += "<img src='.img/" + item['type'].lower() + ".jpg'>"
             if item['attr1']:
-                itemDescDict[identifier] += "<img src='img/" + item['attr1'].lower() + ".jpg'>" 
+                itemDescDict[identifier] += "<img src='.img/" + item['attr1'].lower() + ".jpg'>" 
             if item['attr2']:
-                itemDescDict[identifier] += "<img src='img/" + item['attr2'].lower() + ".jpg'>"
+                itemDescDict[identifier] += "<img src='.img/" + item['attr2'].lower() + ".jpg'>"
             itemDescDict[identifier] += "</span><span class='batchNum'>" + item['batchNum'].lower() + "</span></div>"
 
     return itemDescDict
@@ -55,7 +57,7 @@ def makeOneSided(json):
             for letter in item['side1symb']:
                 buildItem += "<tr><td class='symbol " + item['side1lang'].lower() + "'>" + letter + "</td></tr>"
             buildItem += "</tbody></table><div class='itemDescription'>"
-            buildItem += "<div class='size arabic'><img src='img/" + str(item['size']) + ".jpg'></div>"
+            buildItem += "<div class='size arabic'><img src='.img/" + str(item['size']) + ".jpg'></div>"
             buildItem += "<div class='description'> " + item['itemNum'] + "<br>" + "SIG -" + item['label'] + "<br>"
             buildItem += str(item['orderNum']) + "<br></div></div></div>"
             identifier = item['itemSort'] + item['type'].lower()
@@ -80,7 +82,7 @@ def makeTwoSided(json):
                 buildItem += "<tr><td class='side1 symbol " + item['side1lang'].lower() + "'>" + side1 + "</td>"
                 buildItem += "<td class='side2 symbol " + item['side2lang'].lower() + "'>" + side2 + "</td></tr>"
             buildItem += "</tbody></table><div class='itemDescription'>"
-            buildItem += "<div class='size arabic'><img src='img/" + str(item['size']) + ".jpg'></div>"
+            buildItem += "<div class='size arabic'><img src='.img/" + str(item['size']) + ".jpg'></div>"
             buildItem += "<div class='description'>" + item['itemNum'] + "<br>" + "SIG -" + item['label'] + "<br>"
             buildItem += str(item['orderNum']) + "<br></div></div></div>"
             itemTwoSided[item['itemSort']].append(buildItem)
@@ -104,7 +106,7 @@ def makeBand(json):
             for letter in item['side1symb']:
                 buildItem += "<td class='symbol " + item['side1lang'].lower() + "'>" + letter + "</td>"
             buildItem += "<td class='blank'></td>"
-            buildItem += "<td class='size arabic'><img src='img/" + str(item['size']).lower() + ".jpg'></td>"
+            buildItem += "<td class='size arabic'><img src='.img/" + str(item['size']).lower() + ".jpg'></td>"
             buildItem += "</tbody></table></div><div class='itemDescription'>"
             buildItem += "<div class='description'>" + item['itemNum'] + " SIG -" + item['label'] + " "
             buildItem += str(item['orderNum']) + "</div></div></div>"
@@ -124,7 +126,7 @@ def makeHTML(json):
     #  for order in sortOrder:
         #  print sortOrder[order]
 
-    boilerplate = "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><title></title><link rel='stylesheet' type='text/css' href='./test.css'></head><body>"
+    boilerplate = "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><title></title><style> @font-face {  font-family: 'heiro';src: url('.fonts/Hiero.ttf');}@font-face {font-family: 'astro';src: url('.fonts/Astro.ttf');}@font-face {font-family: 'greek';src: url('.fonts/greek.ttf');}.hiero {font-family: 'heiro';font-size: 30px;}.astro {font-family: 'astro';font-size: 30px;}.greek {font-family: 'greek';font-size: 30px;}div.orderDescData {max-height: 50px;margin-bottom: 10px;}span.arabic > img {max-height: 50px;max-width: 150px;}div.item {float: left;display: flex-inline;height: 445px;border-right: 1px solid black;margin-bottom: 20px;}div.item.oneSided {width: 85px;}div.item.twoSided {width: 115px;}div.size > img {display: block;margin: 0 auto;}div.orderDescData:last-child {clear: right;}table.itemSymbols {width: 100%;}td.symbol {width: 30px;height: 30px;text-align: center;}div.item {position: relative;}div.itemDescription {position: absolute;bottom: 0;max-width: 100%;overflow: hidden;white-space: nowrap;}div.band {height: 90px;width: auto;}div.description {margin: 10px;}div.break {clear: both;}</style></head><body>"
     endplate = "</body></html>"
 
     html = ""
@@ -168,7 +170,14 @@ def makeHTML(json):
             x3 += 1
     html += endplate
 
-    print html
+    return html
+
+def writeHTML(json):
+
+    html = makeHTML(json)
+    f = open(argOut, "w")
+    f.write(html)
+    f.close()
 
 def readJSON(filename):
     """
@@ -177,6 +186,7 @@ def readJSON(filename):
     :returns: json file
     :rtype: string
     """
+
     f = open(filename, "r")
     orderFileJSON = f.read()
     order = json.loads(orderFileJSON)
