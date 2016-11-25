@@ -127,11 +127,12 @@ def makeHTML(json):
     html = ""
     html += boilerplate
     for key, order in sortOrder: 
+        print key
         if 'ring' not in key and 'bracelet' not in key and '2sided' not in key:
             html += "<div class='break'></div>"
             html += "<div class='order'>"
             html += order
-            o = 0 # for counting sortOrder
+            o = 0 # counting for line breaks
             for oneSided in oneSideds:
                 for item in oneSideds[oneSided]:
                     if o % 8 == 0 and o != 0:
@@ -160,7 +161,7 @@ def makeHTML(json):
                     html += item
     html += endplate
 
-    print html
+    #  print html
 
 def readJSON(filename):
     """
