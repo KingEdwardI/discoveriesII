@@ -95,7 +95,7 @@ def makeOneSided(json):
         if not any(item['type'].lower() in s for s in bandTypes) and item['attr1'].lower().replace(' ', '') != '2sided':
             buildItem = "<div class='item oneSided'><table class='itemSymbols'><tbody>"
             for letter in item['side1symb']:
-                buildItem += "<tr><td class='symbol " + item['side1lang'].lower() + "'>" + letter + "</td></tr>"
+                buildItem += "<tr><td class='symbol " + item['side1lang'].lower() + "'>" + letter.upper() + "</td></tr>"
             buildItem += "</tbody></table><div class='itemDescription'>"
             buildItem += "<div class='size arabic'><img src='.img/" + str(item['size']) + ".jpg'></div>"
             buildItem += "<div class='description'> " + item['itemNum'] + " " + str(item['size']) + "<br>" + item['label'] + "<br>"
@@ -124,9 +124,20 @@ def makeTwoSided(json):
     for item in json:
         if not any(item['type'].lower() in s for s in bandTypes) and item['attr1'].lower().replace(' ', '') == '2sided':
             buildItem = "<div class='item twoSided'><table class='itemSymbols'><tbody>"
-            for side1, side2 in zip(item['side1symb'], item['side2symb']):
-                buildItem += "<tr><td class='side1 symbol " + item['side1lang'].lower() + "'>" + side1 + "</td>"
-                buildItem += "<td class='side2 symbol " + item['side2lang'].lower() + "'>" + side2.upper() + "</td></tr>"
+            print len(item['side1symb'])
+            print len(item['side2symb'])
+            if len(item['side1symb']) > len(item['side2symb']):
+                length = len(item['side1symb'])
+            else:
+                length = len(item['side2symb'])
+            print length
+            for i in range(length):
+                print i
+                try:
+                    buildItem += "<tr><td class='side1 symbol " + item['side1lang'].lower() + "'>" + item['side1symb'][i].upper() + "</td>"
+                    buildItem += "<td class='side2 symbol " + item['side2lang'].lower() + "'>" + item['side2symb'][i].upper() + "</td></tr>"
+                except IndexError:
+                    buildItem += "<tr><td class='blank'> </td></tr>"
             buildItem += "</tbody></table><div class='itemDescription'>"
             buildItem += "<div class='size arabic'><img src='.img/" + str(item['size']) + ".jpg'></div>"
             buildItem += "<div class='description'>" + item['itemNum'] + " " + item['size'] + "<br>" + item['label'] + "<br>"
@@ -155,7 +166,7 @@ def makeBand(json):
         if any(item['type'].lower() in s for s in bandTypes):
             buildItem = "<div class='item band'><div><table class='itemSymbols'><tbody><tr>"
             for letter in item['side1symb']:
-                buildItem += "<td class='symbol " + item['side1lang'].lower() + "'>" + letter + "</td>"
+                buildItem += "<td class='symbol " + item['side1lang'].lower() + "'>" + letter.upper() + "</td>"
             buildItem += "<td class='blank'></td>"
             buildItem += "<td class='size arabic'><img src='.img/" + str(item['size']).lower() + ".jpg'></td>"
             buildItem += "</tbody></table></div><div class='itemDescription'>"
@@ -182,7 +193,7 @@ def makeHTML(json):
     print bands
     sortOrder = sorted(orders.items())
 
-    boilerplate = "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><title></title><style> @font-face {  font-family: 'heiro';src: url('.fonts/Hiero.ttf');}@font-face {font-family: 'astro';src: url('.fonts/Astro.ttf');}@font-face {font-family: 'greek';src: url('.fonts/greek.ttf');}.hiero {font-family: 'heiro';font-size: 30px;}.astro {font-family: 'astro';font-size: 30px;}.greek {font-family: 'greek';font-size: 30px;}div.orderDescData {max-height: 50px;margin-bottom: 10px;}span.arabic > img {max-height: 50px;max-width: 150px;}div.item {float: left;display: flex-inline;height: 445px;border-right: 1px solid black;margin-bottom: 20px;}div.item.oneSided {width: 85px;}div.item.twoSided {width: 115px;}div.size > img {display: block;margin: 0 auto;}div.orderDescData:last-child {clear: right;}table.itemSymbols {width: 100%;}td.symbol {width: 30px;height: 30px;text-align: center;}div.item {position: relative;}div.itemDescription {position: absolute;bottom: 0;max-width: 100%;overflow: hidden;white-space: nowrap;}div.band {height: 90px;width: auto;}div.description {margin: 10px;}div.break {clear: both;}</style></head><body>"
+    boilerplate = "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><title></title><style> @font-face {  font-family: 'heiro';src: url('.fonts/Hiero.ttf');}@font-face {font-family: 'astro';src: url('.fonts/Astro.ttf');}@font-face {font-family: 'greek';src: url('.fonts/greek.ttf');}.hiero {font-family: 'heiro';font-size: 30px;}.astro {font-family: 'astro';font-size: 30px;}.greek {font-family: 'greek';font-size: 30px;}div.orderDescData {max-height: 50px;margin-bottom: 10px;}span.arabic > img {max-height: 50px;max-width: 150px;}div.item {float: left;display: flex-inline;height: 445px;border-right: 1px solid black;margin-bottom: 20px;}div.item.oneSided {width: 100px;}div.item.twoSided {width: 115px;}div.size > img {display: block;margin: 0 auto;}div.orderDescData:last-child {clear: right;}table.itemSymbols {width: 100%;}td.symbol {width: 30px;height: 30px;text-align: center;}div.item {position: relative;}div.itemDescription {position: absolute;bottom: 0;max-width: 100%;overflow: hidden;white-space: nowrap;}div.band {height: 90px;width: auto;}div.description {margin: 10px; font-size: 12px}div.break {clear: both;}</style></head><body>"
     endplate = "</body></html>"
 
     html = ""
@@ -199,7 +210,7 @@ def makeHTML(json):
                 html += "<div class='break'></div>"
                 html += order
                 for item in oneSideds[oneSided]:
-                    if o % 8 == 0 and o != 0:
+                    if o % 6 == 0 and o != 0:
                         html += "<div class='break'></div>" + order
                     html += item 
                     o += 1
@@ -210,7 +221,7 @@ def makeHTML(json):
                 html += "<div class='break'></div>"
                 html += order
                 for item in twoSideds[twoSided]:
-                    if t % 6 == 0 and t != 0 :
+                    if t % 5 == 0 and t != 0 :
                         html += "<div class='break'></div>" + order
                     html += item 
                     t += 1
