@@ -101,7 +101,7 @@ def makeOneSided(json):
                 buildItem += "<div class='size arabic'><img src='.img/" + str(item['size']).lower() + ".jpg'></div>"
             else: 
                 buildItem += "<div class='size arabic'></div>"
-            buildItem += "<div class='description'> " + item['itemNum'] + " " + str(item['size']).lower() + "<br>" + item['customerNum'] + ' ' + item['label'] + "<br>"
+            buildItem += "<div class='description'> " + item['itemNum'] + "<br>" + item['customerNum'] + ' ' + item['label'] + "<br>"
             buildItem += str(item['orderNum']) + "<br></div></div></div>"
             identifier = item['itemSort']
             itemOneSided[unidecode(identifier)].append(buildItem)
@@ -143,15 +143,9 @@ def makeTwoSided(json):
                     except IndexError:
                         buildItem += "<td class='side1 symbol'> </td>"
                     buildItem += "<td class='side2 symbol " + item['side2lang'].lower() + "'>" + item['side2symb'][i].upper() + "</td></tr>"
-            #  for i in range(length):
-                #  try:
-                    #  buildItem += "<tr><td class='side1 symbol " + item['side1lang'].lower() + "'>" + item['side1symb'][i].upper() + "</td>"
-                    #  buildItem += "<td class='side2 symbol " + item['side2lang'].lower() + "'>" + item['side2symb'][i].upper() + "</td></tr>"
-                #  except IndexError:
-                    #  buildItem += "<tr><td class='blank'> </td></tr>"
             buildItem += "</tbody></table><div class='itemDescription'>"
             buildItem += "<div class='size arabic'><img src='.img/" + str(item['size']).lower() + ".jpg'></div>"
-            buildItem += "<div class='description'>" + item['itemNum'] + " " + str(item['size']).lower() + "<br>" + item['customerNum'] + ' ' + item['label'] + "<br>"
+            buildItem += "<div class='description'>" + item['itemNum'] + "<br>" + item['customerNum'] + ' ' + item['label'] + "<br>"
             buildItem += str(item['orderNum']) + "<br></div></div></div>"
             itemTwoSided[item['itemSort']].append(buildItem)
 
@@ -184,7 +178,7 @@ def makeBand(json):
             else:
                 buildItem += "<td class='size arabic'></td>"
             buildItem += "</tbody></table></div><div class='itemDescription'>"
-            buildItem += "<div class='description'>" + item['itemNum'] + str(item['size']).lower() + " " + item['customerNum'] + ' ' + item['label'] + " "
+            buildItem += "<div class='description'>" + item['itemNum'] + item['customerNum'] + ' ' + item['label'] + " "
             buildItem += str(item['orderNum']) + "</div></div></div>"
             itemBand[item['itemSort']].append(buildItem)
 
