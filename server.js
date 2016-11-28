@@ -13,7 +13,6 @@ var upload = multer({ dest: 'uploads/' });
 var type = upload.single('sampleFile');
 // csv to json converter
 var csvToJson = require("csvtojson").Converter;
-var csvtojson = new csvToJson({});
 // serve folder
 var serveIndex = require('serve-index');
 var requireDir = require('require-dir');
@@ -32,27 +31,22 @@ app.post('/uploads', type,
     var uploadfile = req.file.filename; // unique identifier for uploaded file
     var finalfile = req.file.originalname; // final filename to be written
     
+    var csvtojson = new csvToJson({});
     csvtojson.fromFile("./uploads/" + uploadfile, (err, result) => { // read from csv file and convert to json
+      if (err) {
+        return console.log('csv-to-json Failed: ', err);
+      }
       
       fs.writeFile(__dirname + '/json/' + uploadfile + '.json', JSON.stringify(result), (err) => { // write converted json to new file
         if (err) {
-          return console.log(err);
+          return console.log('writeFile Failed: ', err);
         }
+        console.log("after fs.writeFile, file: ", uploadfile, 'final: ',finalfile)
         exec('python buildorder.py ./json/' + uploadfile + '.json ./orders/' + finalfile.replace('.csv', '') + '.html', (err) => {
           if (err) {
-            console.log(err);
+            console.log('python failed: ', err);
           }
           
-          /*
-           * html = fs.readFileSync('./html_/' + uploadfile + '.html', 'utf8');
-           * pdf.create(html, options).toFile(__dirname + '/orders/' + finalfile + '.pdf', (err,res) => {
-           *   if (err) {
-           *     return console.log(err);
-           *   }
-           *   console.log(res)
-           * });
-           */
-
         });
 
       });

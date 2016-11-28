@@ -63,14 +63,14 @@ def getOrderNums(json):
         if identifier not in itemDescDict:
             itemDescDict[identifier] = "<div class='orderDescData'><span class='orderDescription'>"
             itemDescDict[identifier] += item['itemSort'] + " | " + item['metal'] + " " + item['type'] + " " + item['attr1'] + " " + item['attr2'] + " | </span><span class='arabic'>" 
-            if item['metal']:
-                itemDescDict[identifier] += "<img src='.img/" + item['metal'].lower() + ".jpg'>" 
-            if item['type']:
-                itemDescDict[identifier] += "<img src='.img/" + item['type'].lower() + ".jpg'>"
-            if item['attr1']:
-                itemDescDict[identifier] += "<img src='.img/" + item['attr1'].lower() + ".jpg'>" 
-            if item['attr2']:
-                itemDescDict[identifier] += "<img src='.img/" + item['attr2'].lower() + ".jpg'>"
+            if item['metal'] != '':
+                itemDescDict[identifier] += "<img src='.img/" + item['metal'].lower().replace(' ', '')+ ".jpg'>" 
+            if item['type'] != '':
+                itemDescDict[identifier] += "<img src='.img/" + item['type'].lower().replace(' ', '')+ ".jpg'>"
+            if item['attr1'] != '':
+                itemDescDict[identifier] += "<img src='.img/" + item['attr1'].lower().replace(' ', '')+ ".jpg'>" 
+            if item['attr2'] != '':
+                itemDescDict[identifier] += "<img src='.img/" + item['attr2'].lower().replace(' ', '')+ ".jpg'>"
             itemDescDict[identifier] += "</span><span class='batchNum'>" + item['batchNum'].lower() + "</span></div>"
 
     return itemDescDict
@@ -97,7 +97,10 @@ def makeOneSided(json):
             for letter in item['side1symb']:
                 buildItem += "<tr><td class='symbol " + item['side1lang'].lower() + "'>" + letter.upper() + "</td></tr>"
             buildItem += "</tbody></table><div class='itemDescription'>"
-            buildItem += "<div class='size arabic'><img src='.img/" + str(item['size']) + ".jpg'></div>"
+            if item['size'] != '':
+                buildItem += "<div class='size arabic'><img src='.img/" + str(item['size']) + ".jpg'></div>"
+            else: 
+                buildItem += "<div class='size arabic'></div>"
             buildItem += "<div class='description'> " + item['itemNum'] + " " + str(item['size']) + "<br>" + item['label'] + "<br>"
             buildItem += str(item['orderNum']) + "<br></div></div></div>"
             identifier = item['itemSort']
@@ -140,7 +143,7 @@ def makeTwoSided(json):
                     buildItem += "<tr><td class='blank'> </td></tr>"
             buildItem += "</tbody></table><div class='itemDescription'>"
             buildItem += "<div class='size arabic'><img src='.img/" + str(item['size']) + ".jpg'></div>"
-            buildItem += "<div class='description'>" + item['itemNum'] + " " + item['size'] + "<br>" + item['label'] + "<br>"
+            buildItem += "<div class='description'>" + item['itemNum'] + " " + str(item['size']) + "<br>" + item['label'] + "<br>"
             buildItem += str(item['orderNum']) + "<br></div></div></div>"
             itemTwoSided[item['itemSort']].append(buildItem)
 
