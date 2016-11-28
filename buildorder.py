@@ -129,14 +129,26 @@ def makeTwoSided(json):
             buildItem = "<div class='item twoSided'><table class='itemSymbols'><tbody>"
             if len(item['side1symb']) > len(item['side2symb']):
                 length = len(item['side1symb'])
+                for i in range(length):
+                    buildItem += "<tr><td class='side1 symbol " + item['side1lang'].lower() + "'>" + item['side1symb'][i].upper() + "</td>"
+                    try:
+                        buildItem += "<td class='side2 symbol " + item['side2lang'].lower() + "'>" + item['side2symb'][i].upper() + "</td></tr>"
+                    except IndexError:
+                        buildItem += "<td class='side2 symbol'> </td>"
             else:
                 length = len(item['side2symb'])
-            for i in range(length):
-                try:
-                    buildItem += "<tr><td class='side1 symbol " + item['side1lang'].lower() + "'>" + item['side1symb'][i].upper() + "</td>"
+                for i in range(length):
+                    try:
+                        buildItem += "<tr><td class='side1 symbol " + item['side1lang'].lower() + "'>" + item['side1symb'][i].upper() + "</td>"
+                    except IndexError:
+                        buildItem += "<td class='side1 symbol'> </td>"
                     buildItem += "<td class='side2 symbol " + item['side2lang'].lower() + "'>" + item['side2symb'][i].upper() + "</td></tr>"
-                except IndexError:
-                    buildItem += "<tr><td class='blank'> </td></tr>"
+            #  for i in range(length):
+                #  try:
+                    #  buildItem += "<tr><td class='side1 symbol " + item['side1lang'].lower() + "'>" + item['side1symb'][i].upper() + "</td>"
+                    #  buildItem += "<td class='side2 symbol " + item['side2lang'].lower() + "'>" + item['side2symb'][i].upper() + "</td></tr>"
+                #  except IndexError:
+                    #  buildItem += "<tr><td class='blank'> </td></tr>"
             buildItem += "</tbody></table><div class='itemDescription'>"
             buildItem += "<div class='size arabic'><img src='.img/" + str(item['size']) + ".jpg'></div>"
             buildItem += "<div class='description'>" + item['itemNum'] + " " + str(item['size']) + "<br>" + item['label'] + "<br>"
@@ -167,7 +179,10 @@ def makeBand(json):
             for letter in item['side1symb']:
                 buildItem += "<td class='symbol " + item['side1lang'].lower() + "'>" + letter.upper() + "</td>"
             buildItem += "<td class='blank'></td>"
-            buildItem += "<td class='size arabic'><img src='.img/" + str(item['size']).lower() + ".jpg'></td>"
+            if item['size'] != '':
+                buildItem += "<td class='size arabic'><img src='.img/" + str(item['size']).lower() + ".jpg'></td>"
+            else:
+                buildItem += "<td class='size arabic'></td>"
             buildItem += "</tbody></table></div><div class='itemDescription'>"
             buildItem += "<div class='description'>" + item['itemNum'] + str(item['size']) + " " + item['label'] + " "
             buildItem += str(item['orderNum']) + "</div></div></div>"
