@@ -127,15 +127,11 @@ def makeTwoSided(json):
     for item in json:
         if not any(item['type'].lower() in s for s in bandTypes) and item['attr1'].lower().replace(' ', '') == '2sided':
             buildItem = "<div class='item twoSided'><table class='itemSymbols'><tbody>"
-            print len(item['side1symb'])
-            print len(item['side2symb'])
             if len(item['side1symb']) > len(item['side2symb']):
                 length = len(item['side1symb'])
             else:
                 length = len(item['side2symb'])
-            print length
             for i in range(length):
-                print i
                 try:
                     buildItem += "<tr><td class='side1 symbol " + item['side1lang'].lower() + "'>" + item['side1symb'][i].upper() + "</td>"
                     buildItem += "<td class='side2 symbol " + item['side2lang'].lower() + "'>" + item['side2symb'][i].upper() + "</td></tr>"
@@ -193,7 +189,6 @@ def makeHTML(json):
     oneSideds = makeOneSided(json)
     twoSideds = makeTwoSided(json)
     bands = makeBand(json)
-    print bands
     sortOrder = sorted(orders.items())
 
     boilerplate = "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><title></title><style> @font-face {  font-family: 'heiro';src: url('.fonts/Hiero.ttf');}@font-face {font-family: 'astro';src: url('.fonts/Astro.ttf');}@font-face {font-family: 'greek';src: url('.fonts/greek.ttf');}.hiero {font-family: 'heiro';font-size: 30px;}.astro {font-family: 'astro';font-size: 30px;}.greek {font-family: 'greek';font-size: 30px;}div.orderDescData {max-height: 50px;margin-bottom: 10px;}span.arabic > img {max-height: 50px;max-width: 150px;}div.item {float: left;display: flex-inline;height: 445px;border-right: 1px solid black;margin-bottom: 20px;}div.item.oneSided {width: 100px;}div.item.twoSided {width: 115px;}div.size > img {display: block;margin: 0 auto;}div.orderDescData:last-child {clear: right;}table.itemSymbols {width: 100%;}td.symbol {width: 30px;height: 30px;text-align: center;}div.item {position: relative;}div.itemDescription {position: absolute;bottom: 0;max-width: 100%;overflow: hidden;white-space: nowrap;}div.band {height: 90px;width: auto;}div.description {margin: 10px; font-size: 12px}div.break {clear: both;}</style></head><body>"
@@ -236,7 +231,6 @@ def makeHTML(json):
 
     html += endplate
 
-    #  print html
     return html
 
 def writeHTML(json):
