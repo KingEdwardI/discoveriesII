@@ -9,6 +9,9 @@ TODO (for version 1.0):
 * ability to delete created orders
 * save as pdf (not just html)
 
+## Requirements:
+* unidecode (pip)
+
 ## buildorder.py
 Creates an html file from a json input.
 

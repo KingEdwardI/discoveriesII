@@ -39,7 +39,7 @@ bandTypes = ['ring','bracelet','ring band', 'band']
 
 def main():
 
-    orderJSON, arabicImageLinks = readJSON(argIn)
+    orderJSON = readJSON(argIn)
     writeHTML(orderJSON)
     #  makeHTML(orderJSON)
 
@@ -259,11 +259,7 @@ def readJSON(filename):
     orderFileJSON = f.read()
     order = json.loads(orderFileJSON)
     f.close()
-    k = open('json/arabic.json', 'r')
-    arabicFileJSON = k.read()
-    arabic = json.loads(arabicFileJSON)
-    k.close()
-    return order, arabic
+    return order
 
 if __name__ == "__main__":
     main()
