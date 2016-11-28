@@ -98,10 +98,10 @@ def makeOneSided(json):
                 buildItem += "<tr><td class='symbol " + item['side1lang'].lower() + "'>" + letter.upper() + "</td></tr>"
             buildItem += "</tbody></table><div class='itemDescription'>"
             if item['size'] != '':
-                buildItem += "<div class='size arabic'><img src='.img/" + str(item['size']) + ".jpg'></div>"
+                buildItem += "<div class='size arabic'><img src='.img/" + str(item['size']).lower() + ".jpg'></div>"
             else: 
                 buildItem += "<div class='size arabic'></div>"
-            buildItem += "<div class='description'> " + item['itemNum'] + " " + str(item['size']) + "<br>" + item['label'] + "<br>"
+            buildItem += "<div class='description'> " + item['itemNum'] + " " + str(item['size']).lower() + "<br>" + item['label'] + "<br>"
             buildItem += str(item['orderNum']) + "<br></div></div></div>"
             identifier = item['itemSort']
             itemOneSided[unidecode(identifier)].append(buildItem)
@@ -150,8 +150,8 @@ def makeTwoSided(json):
                 #  except IndexError:
                     #  buildItem += "<tr><td class='blank'> </td></tr>"
             buildItem += "</tbody></table><div class='itemDescription'>"
-            buildItem += "<div class='size arabic'><img src='.img/" + str(item['size']) + ".jpg'></div>"
-            buildItem += "<div class='description'>" + item['itemNum'] + " " + str(item['size']) + "<br>" + item['label'] + "<br>"
+            buildItem += "<div class='size arabic'><img src='.img/" + str(item['size']).lower() + ".jpg'></div>"
+            buildItem += "<div class='description'>" + item['itemNum'] + " " + str(item['size']).lower() + "<br>" + item['label'] + "<br>"
             buildItem += str(item['orderNum']) + "<br></div></div></div>"
             itemTwoSided[item['itemSort']].append(buildItem)
 
@@ -184,7 +184,7 @@ def makeBand(json):
             else:
                 buildItem += "<td class='size arabic'></td>"
             buildItem += "</tbody></table></div><div class='itemDescription'>"
-            buildItem += "<div class='description'>" + item['itemNum'] + str(item['size']) + " " + item['label'] + " "
+            buildItem += "<div class='description'>" + item['itemNum'] + str(item['size']).lower() + " " + item['label'] + " "
             buildItem += str(item['orderNum']) + "</div></div></div>"
             itemBand[item['itemSort']].append(buildItem)
 
@@ -206,7 +206,7 @@ def makeHTML(json):
     bands = makeBand(json)
     sortOrder = sorted(orders.items())
 
-    boilerplate = "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><title></title><style> @font-face {  font-family: 'heiro';src: url('.fonts/Hiero.ttf');}@font-face {font-family: 'astro';src: url('.fonts/Astro.ttf');}@font-face {font-family: 'greek';src: url('.fonts/greek.ttf');}.hiero {font-family: 'heiro';font-size: 30px;}.astro {font-family: 'astro';font-size: 30px;}.greek {font-family: 'greek';font-size: 30px;}div.orderDescData {max-height: 50px;margin-bottom: 10px;}span.arabic > img {max-height: 50px;max-width: 150px;}div.item {float: left;display: flex-inline;height: 445px;border-right: 1px solid black;margin-bottom: 20px;}div.item.oneSided {width: 100px;}div.item.twoSided {width: 115px;}div.size > img {display: block;margin: 0 auto;}div.orderDescData:last-child {clear: right;}table.itemSymbols {width: 100%;}td.symbol {width: 30px;height: 30px;text-align: center;}div.item {position: relative;}div.itemDescription {position: absolute;bottom: 0;max-width: 100%;overflow: hidden;white-space: nowrap;}div.band {height: 90px;width: auto;}div.description {margin: 10px; font-size: 12px}div.break {clear: both;}</style></head><body>"
+    boilerplate = "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><title></title><style> @font-face {  font-family: 'heiro';src: url('.fonts/Hiero.ttf');}@font-face {font-family: 'astro';src: url('.fonts/Astro.ttf');}@font-face {font-family: 'greek';src: url('.fonts/greek.ttf');}.hiero {font-family: 'heiro';font-size: 30px;}.astro {font-family: 'astro';font-size: 30px;}.greek {font-family: 'greek';font-size: 30px;}div.orderDescData {max-height: 50px;margin-bottom: 10px;}span.arabic > img {max-height: 50px;max-width: 150px;}div.item {float: left;display: flex-inline;height: 445px;margin-bottom: 20px;}div.item.oneSided {width: 100px;}div.item.twoSided {width: 115px;}div.size > img {display: block;margin: 0 auto;}div.orderDescData:last-child {clear: right;}table.itemSymbols {width: 100%;}td.symbol {width: 30px;height: 30px;text-align: center;}div.item {position: relative;}div.itemDescription {position: absolute;bottom: 0;max-width: 100%;overflow: hidden;white-space: nowrap;}div.band {height: 90px;width: auto;}div.description {margin: 10px; font-size: 12px}div.break {clear: both;}</style></head><body>"
     endplate = "</body></html>"
 
     html = ""
