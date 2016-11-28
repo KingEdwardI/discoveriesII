@@ -56,17 +56,19 @@ def getOrderNums(json):
     for item in json:
         # create a unique identifier for each item and append 'z' if it's a band for sorting in the future
         if any(item['type'].lower() in s for s in bandTypes): 
-            identifier = "z" + item['itemSort'].lower() + item['type'].lower() + item['attr1'].lower().replace(' ', '')
+            identifier = "z" + item['itemSort'].lower()
         else:
-            identifier = item['itemSort'].lower() + item['type'].lower() + item['attr1'].lower().replace(' ', '')
+            identifier = item['itemSort'].lower()
             # create a view-model for each item in an order
         if identifier not in itemDescDict:
             itemDescDict[identifier] = "<div class='orderDescData'><span class='orderDescription'>"
-            itemDescDict[identifier] += item['itemSort'] + " | " + item['metal'] + " " + item['type'] + item['style'] + " " + item['attr1'] + " " + item['attr2'] + " | </span><span class='arabic'>" 
+            itemDescDict[identifier] += item['itemSort'] + " | " + item['metal'] + " " + item['type'] + " " + item['style'] + " " + item['attr1'] + " " + item['attr2'] + " | </span><span class='arabic'>" 
             if item['metal'] != '':
                 itemDescDict[identifier] += "<img src='.img/" + item['metal'].lower().replace(' ', '')+ ".jpg'>" 
             if item['type'] != '':
                 itemDescDict[identifier] += "<img src='.img/" + item['type'].lower().replace(' ', '')+ ".jpg'>"
+            if item['style'] != '':
+                itemDescDict[identifier] += "<img src='.img/" + item['style'].lower().replace(' ', '')+ ".jpg'>"
             if item['attr1'] != '':
                 itemDescDict[identifier] += "<img src='.img/" + item['attr1'].lower().replace(' ', '')+ ".jpg'>" 
             if item['attr2'] != '':
@@ -200,7 +202,7 @@ def makeHTML(json):
     bands = makeBand(json)
     sortOrder = sorted(orders.items())
 
-    boilerplate = "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><title></title><style> @font-face {  font-family: 'heiro';src: url('.fonts/Hiero.ttf');}@font-face {font-family: 'astro';src: url('.fonts/Astro.ttf');}@font-face {font-family: 'greek';src: url('.fonts/greek.ttf');}.hiero {font-family: 'heiro';font-size: 30px;}.astro {font-family: 'astro';font-size: 30px;}.greek {font-family: 'greek';font-size: 30px;}div.orderDescData {max-height: 50px;margin-bottom: 10px;}span.arabic > img {max-height: 50px;max-width: 100px;}div.item {border-right: 1px solid black;float: left;display: flex-inline;height: 421px;margin-bottom: 20px;}div.item.oneSided {width: 100px;}div.item.twoSided {width: 115px;}div.size > img {display: block;margin: 0 auto;}div.orderDescData:last-child {clear: right;}table.itemSymbols {width: 100%;}td.symbol {width: 30px;height: 30px;text-align: center;}div.item {position: relative;}div.itemDescription {position: absolute;bottom: 0;max-width: 100%;overflow: hidden;white-space: nowrap;}div.band {height: 90px;width: auto;}div.description {margin: 10px; font-size: 12px}div.break {clear: both;}</style></head><body>"
+    boilerplate = "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><title></title><style> @font-face {  font-family: 'heiro';src: url('.fonts/Hiero.ttf');}@font-face {font-family: 'astro';src: url('.fonts/Astro.ttf');}@font-face {font-family: 'greek';src: url('.fonts/greek.ttf');}.hiero {font-family: 'heiro';font-size: 30px;}.astro {font-family: 'astro';font-size: 30px;}.greek {font-family: 'greek';font-size: 30px;}div.orderDescData {max-height: 50px;margin-bottom: 10px;}span.arabic > img {max-height: 50px;max-width: 75px;}div.item {border-right: 1px solid black;float: left;display: flex-inline;height: 421px;margin-bottom: 20px;}div.item.oneSided {width: 100px;}div.item.twoSided {width: 115px;}div.size > img {display: block;margin: 0 auto;}div.orderDescData:last-child {clear: right;}table.itemSymbols {width: 100%;}td.symbol {width: 30px;height: 30px;text-align: center;}div.item {position: relative;}div.itemDescription {position: absolute;bottom: 0;max-width: 100%;overflow: hidden;white-space: nowrap;}div.band {height: 90px;width: auto;}div.description {margin: 10px; font-size: 12px}div.break {clear: both;}</style></head><body>"
     endplate = "</body></html>"
 
     html = ""
@@ -213,7 +215,8 @@ def makeHTML(json):
         o = 0 
         for oneSided in oneSideds:
             o = 0 
-            if oneSided.lower() in key.lower():
+            if oneSided.lower() == key.lower():
+                print oneSided, key
                 html += "<div class='break'></div>"
                 html += order
                 for item in oneSideds[oneSided]:
