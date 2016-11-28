@@ -101,7 +101,7 @@ def makeOneSided(json):
                 buildItem += "<div class='size arabic'><img src='.img/" + str(item['size']).lower() + ".jpg'></div>"
             else: 
                 buildItem += "<div class='size arabic'></div>"
-            buildItem += "<div class='description'> " + item['itemNum'] + " " + str(item['size']).lower() + "<br>" + item['label'] + "<br>"
+            buildItem += "<div class='description'> " + item['itemNum'] + " " + str(item['size']).lower() + "<br>" + item['customerNum'] + ' ' + item['label'] + "<br>"
             buildItem += str(item['orderNum']) + "<br></div></div></div>"
             identifier = item['itemSort']
             itemOneSided[unidecode(identifier)].append(buildItem)
@@ -151,7 +151,7 @@ def makeTwoSided(json):
                     #  buildItem += "<tr><td class='blank'> </td></tr>"
             buildItem += "</tbody></table><div class='itemDescription'>"
             buildItem += "<div class='size arabic'><img src='.img/" + str(item['size']).lower() + ".jpg'></div>"
-            buildItem += "<div class='description'>" + item['itemNum'] + " " + str(item['size']).lower() + "<br>" + item['label'] + "<br>"
+            buildItem += "<div class='description'>" + item['itemNum'] + " " + str(item['size']).lower() + "<br>" + item['customerNum'] + ' ' + item['label'] + "<br>"
             buildItem += str(item['orderNum']) + "<br></div></div></div>"
             itemTwoSided[item['itemSort']].append(buildItem)
 
@@ -184,7 +184,7 @@ def makeBand(json):
             else:
                 buildItem += "<td class='size arabic'></td>"
             buildItem += "</tbody></table></div><div class='itemDescription'>"
-            buildItem += "<div class='description'>" + item['itemNum'] + str(item['size']).lower() + " " + item['label'] + " "
+            buildItem += "<div class='description'>" + item['itemNum'] + str(item['size']).lower() + " " + item['customerNum'] + ' ' + item['label'] + " "
             buildItem += str(item['orderNum']) + "</div></div></div>"
             itemBand[item['itemSort']].append(buildItem)
 
