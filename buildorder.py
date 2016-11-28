@@ -62,7 +62,7 @@ def getOrderNums(json):
             # create a view-model for each item in an order
         if identifier not in itemDescDict:
             itemDescDict[identifier] = "<div class='orderDescData'><span class='orderDescription'>"
-            itemDescDict[identifier] += item['itemSort'] + " | " + item['metal'] + " " + item['type'] + " " + item['attr1'] + " " + item['attr2'] + " | </span><span class='arabic'>" 
+            itemDescDict[identifier] += item['itemSort'] + " | " + item['metal'] + " " + item['type'] + item['style'] + " " + item['attr1'] + " " + item['attr2'] + " | </span><span class='arabic'>" 
             if item['metal'] != '':
                 itemDescDict[identifier] += "<img src='.img/" + item['metal'].lower().replace(' ', '')+ ".jpg'>" 
             if item['type'] != '':
