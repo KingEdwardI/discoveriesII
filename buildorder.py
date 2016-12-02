@@ -118,7 +118,7 @@ def makeOneSided(json):
                 # add in a blank div
                 buildItem += "<div class='size arabic'></div>"
             # create the english description
-            buildItem += "<div class='description'> " + item['itemNum'] + "<br>" + item['customerNum'] + ' ' + item['label'] + "<br>"
+            buildItem += "<div class='description'> " + item['itemNum'] + "<br>" + item['customerNum'] + ' - ' + item['label'] + "<br>"
             # close tags
             buildItem += str(item['orderNum']) + "<br></div></div></div>"
             identifier = item['itemSort']
@@ -179,7 +179,7 @@ def makeTwoSided(json):
             # add that items size
             buildItem += "<div class='size arabic'><img src='.img/" + str(item['size']).lower() + ".jpg'></div>"
             # add in that items number
-            buildItem += "<div class='description'>" + item['itemNum'] + "<br>" + item['customerNum'] + ' ' + item['label'] + "<br>"
+            buildItem += "<div class='description'>" + item['itemNum'] + "<br>" + item['customerNum'] + ' - ' + item['label'] + "<br>"
             # add in the orderNum
             buildItem += str(item['orderNum']) + "<br></div></div></div>"
             # add to the dict
@@ -225,7 +225,7 @@ def makeBand(json):
             # close item characters, and begin item description
             buildItem += "</tbody></table></div><div class='itemDescription'>"
             # create the itemDescription, to be printed horizontally along the bottom
-            buildItem += "<div class='description'>" + item['itemNum'] + item['customerNum'] + ' ' + item['label'] + " "
+            buildItem += "<div class='description'>" + item['itemNum'] + item['customerNum'] + ' - ' + item['label'] + " "
             # add the order number and close all divs
             buildItem += str(item['orderNum']) + "</div></div></div>"
             itemBand[item['itemSort']].append(buildItem)
@@ -249,7 +249,7 @@ def makeHTML(json):
     sortOrder = sorted(orders.items())
 
     # can be found formatted in tests/boilerplate.html
-    boilerplate = "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><title></title><style> @font-face {  font-family: 'heiro';src: url('.fonts/Hiero.ttf');}@font-face {font-family: 'astro';src: url('.fonts/Astro.ttf');}@font-face {font-family: 'greek';src: url('.fonts/greek.ttf');}.hiero {font-family: 'heiro';font-size: 30px;}.astro {font-family: 'astro';font-size: 30px;}.greek {font-family: 'greek';font-size: 30px;}div.orderDescData {max-height: 50px;margin-bottom: 10px;}span.arabic > img {max-height: 50px; max-width: 250px;}div.item {border-right: 1px solid black;float: left;display: flex-inline;height: 400px;margin-bottom: 20px;}div.item.oneSided {width: 100px;}div.item.twoSided {width: 115px;}div.size > img {display: block;margin: 0 auto; max-height: 40px; max-width:40px;}div.orderDescData:last-child {clear: right;}table.itemSymbols {width: 100%;}td.symbol {width: 30px;height: 30px;text-align: center;}div.item {position: relative;}div.itemDescription {position: absolute;bottom: 0;max-width: 100%;overflow: hidden;white-space: nowrap;}div.band {height: 90px;width: auto;}div.description {margin: 10px; font-size: 12px}div.break {clear: both;}</style></head><body>"
+    boilerplate = "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><title></title><style> @font-face {  font-family: 'heiro';src: url('.fonts/Hiero.ttf');}@font-face {font-family: 'astro';src: url('.fonts/Astro.ttf');}@font-face {font-family: 'greek';src: url('.fonts/greek.ttf');}.hiero {font-family: 'heiro';font-size: 30px;}.astro {font-family: 'astro';font-size: 30px;}.greek {font-family: 'greek';font-size: 30px;}div.orderDescData {max-height: 50px;margin-bottom: 10px;}span.arabic > img {max-height: 20px; max-width: 100px;}div.item {border-right: 1px solid black;float: left;display: flex-inline;height: 400px;margin-bottom: 20px;}div.item.oneSided {width: 100px;}div.item.twoSided {width: 115px;}div.size > img {display: block;margin: 0 auto; max-height: 40px; max-width:40px;}div.orderDescData:last-child {clear: right;}table.itemSymbols {width: 100%;}td.symbol {width: 30px;height: 30px;text-align: center;}div.item {position: relative;}div.itemDescription {position: absolute;bottom: 0;max-width: 100%;overflow: hidden;white-space: nowrap;}div.band {height: 90px;width: auto;}div.description {margin: 10px; font-size: 12px}div.break {clear: both;}</style></head><body>"
     endplate = "</body></html>"
 
     html = ""
