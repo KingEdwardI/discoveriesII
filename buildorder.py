@@ -118,7 +118,7 @@ def makeOneSided(json):
                 # add in a blank div
                 buildItem += "<div class='size arabic'></div>"
             # create the english description
-            buildItem += "<div class='description'> " + item['itemNum'] + "<br>" + item['customerNum'] + ' - ' + item['label'] + "<br>"
+            buildItem += "<div class='description'> " + item['itemNum'] + "<br>" + item['customerNum'] + ' | ' + item['label'] + "<br>"
             # close tags
             buildItem += str(item['orderNum']) + "<br></div></div></div>"
             identifier = item['itemSort']
@@ -179,7 +179,7 @@ def makeTwoSided(json):
             # add that items size
             buildItem += "<div class='size arabic'><img src='.img/" + str(item['size']).lower() + ".jpg'></div>"
             # add in that items number
-            buildItem += "<div class='description'>" + item['itemNum'] + "<br>" + item['customerNum'] + ' - ' + item['label'] + "<br>"
+            buildItem += "<div class='description'>" + item['itemNum'] + "<br>" + item['customerNum'] + ' | ' + item['label'] + "<br>"
             # add in the orderNum
             buildItem += str(item['orderNum']) + "<br></div></div></div>"
             # add to the dict
@@ -225,7 +225,7 @@ def makeBand(json):
             # close item characters, and begin item description
             buildItem += "</tbody></table></div><div class='itemDescription'>"
             # create the itemDescription, to be printed horizontally along the bottom
-            buildItem += "<div class='description'>" + item['itemNum'] + item['customerNum'] + ' - ' + item['label'] + " "
+            buildItem += "<div class='description'>" + item['itemNum'] + item['customerNum'] + ' | ' + item['label'] + " "
             # add the order number and close all divs
             buildItem += str(item['orderNum']) + "</div></div></div>"
             itemBand[item['itemSort']].append(buildItem)
