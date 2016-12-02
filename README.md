@@ -8,6 +8,7 @@ TODO (for version 1.0):
 
 * ability to delete created orders
 * save as pdf (not just html)
+* Error handling for bad files
 
 ## Requirements:
 * unidecode (pip)
@@ -22,3 +23,4 @@ $ python buildorder.py path/to/input.json path/to/output.html
 ## Node server
 * Serves orders that have already been created
 * Page for uploading new files 
+
