@@ -9,8 +9,8 @@ Strategy: Build an html page containing orders for Discoveries - Egyptian Import
 
 JSON model:
     {
-    "item-sort"  : "string"
-    "item-num": "string",
+    "itemsort"  : "string"
+    "itemnum": "string",
     "type": "string",
     "metal": "string",
     "style": "string",
@@ -22,9 +22,9 @@ JSON model:
     "side2lang": "string",
     "side2symb": "string",
     "label": "string",
-    "cust-num": "string",
-    "batch-num": "string",
-    "order-num": "string"
+    "custnum": "string",
+    "batchnum": "string",
+    "ordernum": "string"
     }
 """
 import json
@@ -44,28 +44,28 @@ def main():
 
 def getOrderNums(json):
     """
-    create the order description for the orders. organize by 'item-sort', from the json
+    create the order description for the orders. organize by 'itemsort', from the json
 
     :returns: dict of lists, containing strings as html
     :rtype: dict
     """
 
-    itemDescDict = {} # {item-sort : itemDesc}
+    itemDescDict = {} # {itemsort : itemDesc}
 
     # loop through items in json file
     for item in json:
         # create a unique identifier for each item and append 'z' if it's a band for sorting in the future
         if any(item['type'].lower() in s for s in bandTypes): 
-            identifier = "z" + item['item-sort'].lower()
+            identifier = "z" + item['itemsort'].lower()
         # if the jewelery is not in the bandTypes array, create unique ID for each item
         else:
-            identifier = item['item-sort'].lower()
+            identifier = item['itemsort'].lower()
         # create a view-model for each item in an order
         if identifier not in itemDescDict:
             # wrapper for the items div
             itemDescDict[identifier] = "<div class='orderDescData'><span class='orderDescription'>"
             # span for item description
-            itemDescDict[identifier] += item['item-sort'] + " | " + item['metal'] + " " + item['type'] + " " + item['style'] + " " + item['attr1'] + " " + item['attr2'] + " | </span><span class='arabic'>" 
+            itemDescDict[identifier] += item['itemsort'] + " | " + item['metal'] + " " + item['type'] + " " + item['style'] + " " + item['attr1'] + " " + item['attr2'] + " | </span><span class='arabic'>" 
             # append Arabic images, in place of words. If the item does not have that attribute, it is not added.
             if item['metal'] != '':
                 itemDescDict[identifier] += "<img src='.img/" + item['metal'].lower().replace(' ', '')+ ".jpg'>" 
@@ -78,7 +78,7 @@ def getOrderNums(json):
             if item['attr2'] != '':
                 itemDescDict[identifier] += "<img src='.img/" + item['attr2'].lower().replace(' ', '')+ ".jpg'>"
             # appending batchNumber, and closing divs
-            itemDescDict[identifier] += "</span><span class='batch-num'>" + item['batch-num'].lower() + "</span></div>"
+            itemDescDict[identifier] += "</span><span class='batchnum'>" + item['batchnum'].lower() + "</span></div>"
 
     return itemDescDict
 
@@ -96,7 +96,7 @@ def makeOneSided(json):
     # loop through items in the json file and create unique identifers for each item that is oneSided. (this does not have to be sorted)
     for item in json:
         if not any(item['type'].lower() in s for s in bandTypes) and item['attr1'].lower().replace(' ','') != '2sided':
-            itemOneSided[unidecode(item['item-sort'])] = []
+            itemOneSided[unidecode(item['itemsort'])] = []
 
     # loop through the items and create an html string of the item
     for item in json:
@@ -118,10 +118,10 @@ def makeOneSided(json):
                 # add in a blank div
                 buildItem += "<div class='size arabic'></div>"
             # create the english description
-            buildItem += "<div class='description'> " + item['item-num'] + "<br>" + item['cust-num'] + ' | ' + item['label'] + "<br>"
+            buildItem += "<div class='description'> " + item['itemnum'] + "<br>" + item['custnum'] + ' | ' + item['label'] + "<br>"
             # close tags
-            buildItem += str(item['order-num']) + "<br></div></div></div>"
-            identifier = item['item-sort']
+            buildItem += str(item['ordernum']) + "<br></div></div></div>"
+            identifier = item['itemsort']
             # create a dict-list entry for that identifier
             itemOneSided[unidecode(identifier)].append(buildItem)
 
@@ -141,7 +141,7 @@ def makeTwoSided(json):
     # loop through items in the json file and create unique identifers for each item that is twoSided. (this does not have to be sorted)
     for item in json:
         if not any(item['type'].lower() in s for s in bandTypes) and item['attr1'].lower().replace(' ', '') == '2sided':
-            itemTwoSided[item['item-sort']] = []
+            itemTwoSided[item['itemsort']] = []
 
     # loop through the items and create the html entry for twoSided items
     for item in json:
@@ -179,11 +179,11 @@ def makeTwoSided(json):
             # add that items size
             buildItem += "<div class='size arabic'><img src='.img/" + str(item['size']).lower() + ".jpg'></div>"
             # add in that items number
-            buildItem += "<div class='description'>" + item['item-num'] + "<br>" + item['cust-num'] + ' | ' + item['label'] + "<br>"
-            # add in the order-num
-            buildItem += str(item['order-num']) + "<br></div></div></div>"
+            buildItem += "<div class='description'>" + item['itemnum'] + "<br>" + item['custnum'] + ' | ' + item['label'] + "<br>"
+            # add in the ordernum
+            buildItem += str(item['ordernum']) + "<br></div></div></div>"
             # add to the dict
-            itemTwoSided[item['item-sort']].append(buildItem)
+            itemTwoSided[item['itemsort']].append(buildItem)
 
     return itemTwoSided
 
@@ -201,7 +201,7 @@ def makeBand(json):
     # loop through items in the json file and create unique identifers for each item that is in bandTypes. (this does not have to be sorted)
     for item in json:
         if any(item['type'].lower() in s for s in bandTypes):
-            itemBand[item['item-sort']] = []
+            itemBand[item['itemsort']] = []
 
     # create values
     for item in json:
@@ -225,10 +225,10 @@ def makeBand(json):
             # close item characters, and begin item description
             buildItem += "</tbody></table></div><div class='itemDescription'>"
             # create the itemDescription, to be printed horizontally along the bottom
-            buildItem += "<div class='description'>" + item['item-num'] + item['cust-num'] + ' | ' + item['label'] + " "
+            buildItem += "<div class='description'>" + item['itemnum'] + item['custnum'] + ' | ' + item['label'] + " "
             # add the order number and close all divs
-            buildItem += str(item['order-num']) + "</div></div></div>"
-            itemBand[item['item-sort']].append(buildItem)
+            buildItem += str(item['ordernum']) + "</div></div></div>"
+            itemBand[item['itemsort']].append(buildItem)
 
     return itemBand
 

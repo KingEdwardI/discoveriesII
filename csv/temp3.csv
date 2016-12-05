@@ -1,4 +1,4 @@
-itemSort,itemNum,type,metal,style,size,attr1,attr2,side1lang,side1symb,side2lang,side2symb,label,customerNum,batchNum,orderNum
+item-sort,item-num,type,metal,style,size,attr1,attr2,side1lang,side1symb,side2lang,side2symb,label,customer-num,batch-num,order-num
 C2S,C2S-L,Cartouche,Silver,,Lg,2 sided,,Hiero,SHON,English,SHON,SHON,SIG,D55,7
 C2S,C2S-L,Cartouche,Silver,,Lg,2 sided,,Hiero,OLIVIA,Hiero,LOVE,OLIVIA,SIG,D55,11
 CGOA,CGOA,Cartouche,18k,Open,,,,Hiero,LIANG,,,LIANG,SIG,D55,G04947180001
