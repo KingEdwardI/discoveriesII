@@ -31,16 +31,17 @@ import json
 import sys
 from unidecode import unidecode
 
-
-argIn = sys.argv[1]
-argOut = sys.argv[2]
+jsonIn = sys.argv[1] # input json
+orderOut = sys.argv[2] # output html for orders
+labelOut = sys.argv[3] # output html for labels
 
 bandTypes = ['ring','bracelet','ring band', 'band']
 
 def main():
-    orderJSON = readJSON(argIn)
+    orderJSON = readJSON(jsonIn)
     writeHTML(orderJSON)
     #  makeHTML(orderJSON)
+    #  makeLabels(orderJSON)
 
 def getOrderNums(json):
     """
@@ -232,6 +233,36 @@ def makeBand(json):
 
     return itemBand
 
+def makeLabels(json):
+
+    for item in json:
+        if any(item['type'].lower() in s for s in bandTypes): 
+            item['itemsort'] = 'z' + item['itemsort']
+
+    sortedjson = sorted(json, key=lambda k: k['itemsort'])
+    
+    bpLabel = "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><title></title><style>div.label{float:left; font-size: 12px; margin-right: 15px; margin-bottom: -10px; height: 85px; width: 1.15in;} div.break{clear:both;} </style></head><body>"
+    endLabel = "</body></html>"
+
+    c = 1
+    for item in sortedjson:
+        buildLabel = ""
+        buildLabel += "<div class='label'>"
+        buildLabel += "<span>" + str(item['label']) + "</span> <br>"
+        buildLabel += "<span>" + str(item['itemnum']) + "</span> <br>"
+        buildLabel += "<span>" + str(item['ordernum']) + "</span> <br>"
+        buildLabel += "<span>" + str(item['custnum']) + " "
+        buildLabel += str(item['batchnum']) + "</span> <br>"
+        buildLabel += "<span>Made in Egypt</span>"
+        buildLabel += "</div>"
+        bpLabel += buildLabel
+        if c % 5 == 0 and c != 0:
+            bpLabel += "<div class='break'></div>"
+        c += 1
+    bpLabel += endLabel
+
+    return bpLabel
+
 def makeHTML(json):
     """
     build out the whole html page
@@ -249,15 +280,17 @@ def makeHTML(json):
     sortOrder = sorted(orders.items())
 
     # can be found formatted in tests/boilerplate.html
-    boilerplate = "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><title></title><style> @font-face {  font-family: 'heiro';src: url('.fonts/Hiero.ttf');}@font-face {font-family: 'astro';src: url('.fonts/Astro.ttf');}@font-face {font-family: 'greek';src: url('.fonts/greek.ttf');}.hiero {font-family: 'heiro';font-size: 30px;}.astro {font-family: 'astro';font-size: 30px;}.greek {font-family: 'greek';font-size: 30px;}div.orderDescData {max-height: 50px;margin-bottom: 10px;}span.arabic > img {max-height: 20px; max-width: 100px;}div.item {border-right: 1px solid black;float: left;display: flex-inline;height: 465px;margin-bottom: 20px;}div.item.oneSided {width: 100px;}div.item.twoSided {width: 115px;}div.size > img {display: block;margin: 0 auto; max-height: 20px; max-width:20px;}div.orderDescData:last-child {clear: right;}table.itemSymbols {width: 100%;}td.symbol {width: 30px;height: 30px;text-align: center;}div.item {position: relative;}div.itemDescription {position: absolute;bottom: 0;max-width: 100%;overflow: hidden;white-space: nowrap;}div.band {height: 90px;width: auto;}div.description {margin: 10px; font-size: 12px}div.break {clear: both;}</style></head><body>"
+    boilerplate = "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><title></title><style> @font-face {  font-family: 'heiro';src: url('.fonts/Hiero.ttf');}@font-face {font-family: 'astro';src: url('.fonts/Astro.ttf');}@font-face {font-family: 'greek';src: url('.fonts/greek.ttf');}.hiero {font-family: 'heiro';font-size: 35px;}.astro {font-family: 'astro';font-size: 35px;}.greek {font-family: 'greek';font-size: 35px;}div.orderDescData {max-height: 50px;margin-bottom: 10px;}span.arabic > img {max-height: 20px; max-width: 100px;}div.item {border-right: 1px solid black;float: left;display: flex-inline;height: 465px;margin-bottom: 20px;}div.item.oneSided {width: 100px;}div.item.twoSided {width: 115px;}div.size > img {display: block;margin: 0 auto; max-height: 20px; max-width:20px;}div.orderDescData:last-child {clear: right;}table.itemSymbols {width: 100%;}td.symbol {width: 30px;height: 30px;text-align: center;}div.item {position: relative;}div.itemDescription {position: absolute;bottom: 0;max-width: 100%;overflow: hidden;white-space: nowrap;}div.band {height: 90px;width: auto;}div.description {margin: 10px; font-size: 12px}div.break {clear: both;} .pagenum{font-weight: bold; margin-left: 10px;}</style></head><body>"
     endplate = "</body></html>"
 
     html = ""
     #  append boilerplate
     html += boilerplate
     x1, x2, x3 = 0, 0, 0 # for counting orders to insert line breaks
-    # create OneSided
+    # create orders
+    pageNum,pageLtr = 1,'A'
     for key, order in sortOrder: 
+
         # insert a line break div for each separate order
         html += "<div class='break'></div>"
         # begin an order
@@ -265,19 +298,30 @@ def makeHTML(json):
         o = 0 # for counting orders
         # loop through oneSided orders
         for oneSided in oneSideds:
-            # for counting items
-            o = 0 
+            o = 0 # for counting items
             # check if the item matches the order
             if oneSided.lower() == key.lower():
                 # add a line break for the first item
                 html += "<div class='break'></div>"
                 #  add the first order 
                 html += order
+
+                html += "<span class='pagenum'>" + str(pageNum) + pageLtr + "</span>"
+                if pageLtr == 'A':
+                    pageLtr = 'B'
+                else:
+                    pageLtr = 'A'
+                    pageNum += 1
                 #  loop through the items 
                 for item in oneSideds[oneSided]:
                     # if 6 items have been printed, add in a line break and add the order again
                     if o % 6 == 0 and o != 0:
-                        html += "<div class='break'></div>" + order
+                        html += "<div class='break'></div>" + order + "<span class='pagenum'>" + str(pageNum) + pageLtr + "</span>"
+                        if pageLtr == 'A':
+                            pageLtr = 'B'
+                        else:
+                            pageLtr = 'A'
+                            pageNum += 1                       
                     # add the order
                     html += item 
                     o += 1
@@ -292,11 +336,23 @@ def makeHTML(json):
                 html += "<div class='break'></div>"
                 #  add the first order 
                 html += order
+
+                html += "<span class='pagenum'>" + str(pageNum) + pageLtr + "</span>"
+                if pageLtr == 'A':
+                    pageLtr = 'B'
+                else:
+                    pageLtr = 'A'
+                    pageNum += 1
                 #  loop through the items 
                 for item in twoSideds[twoSided]:
                     # if 5 items have been printed, add in a line break and add the order again
-                    if t % 5 == 0 and t != 0 :
-                        html += "<div class='break'></div>" + order
+                    if t % 5 == 0 and t != 0:
+                        html += "<div class='break'></div>" + order + "<span class='pagenum'>" + str(pageNum) + pageLtr + "</span>"
+                        if pageLtr == 'A':
+                            pageLtr = 'B'
+                        else:
+                            pageLtr = 'A'
+                            pageNum += 1
                     # add the order
                     html += item 
                     t += 1
@@ -310,6 +366,8 @@ def makeHTML(json):
                     # add that order and the item for that order
                     html += "<div class='break'></div>" + order
                     html += item 
+        html += "</div>"
+
 
     # close the body and html tags.
     html += endplate
@@ -319,10 +377,14 @@ def makeHTML(json):
 def writeHTML(json):
     """write out to a specified file."""
 
-    html = makeHTML(json)
-    f = open(argOut, "w")
-    f.write(html)
-    f.close()
+    orderHtml = makeHTML(json)
+    labelHtml = makeLabels(json)
+    f1 = open(orderOut, "w")
+    f1.write(orderHtml)
+    f1.close()
+    f2 = open(labelOut, "w")
+    f2.write(labelHtml)
+    f2.close()
 
 def readJSON(filename):
     """

@@ -41,7 +41,7 @@ app.post('/uploads', type,
         if (err) {
           return console.log('writeFile Failed: ', err);
         }
-        exec('python buildorder.py ./json/' + uploadfile + '.json ./orders/' + finalfile.replace('.csv', '') + '.html', (err) => {
+        exec('python buildorder.py ./json/' + uploadfile + '.json ./orders/' + finalfile.replace('.csv', '') + '.html ./orders/' + finalfile.replace('.csv', '') + '-label.html', (err) => {
           if (err) {
             console.log('python failed: ', err);
           }
