@@ -241,7 +241,7 @@ def makeLabels(json):
 
     sortedjson = sorted(json, key=lambda k: k['itemsort'])
     
-    bpLabel = "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><title></title><style>div.label{float:left; font-size: 12px; margin-right: 15px; margin-bottom: -10px; height: 85px; width: 1.15in;} div.break{clear:both;} </style></head><body>"
+    bpLabel = "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><title></title><style>div.label{float:left; font-size: 12pt; margin-right: 10px; margin-bottom: -10px; height: 100px; width: 1in; overflow: hidden; white-space: nowrap} div.break{clear:both;} </style></head><body>"
     endLabel = "</body></html>"
 
     c = 1
@@ -256,7 +256,7 @@ def makeLabels(json):
         buildLabel += "<span>Made in Egypt</span>"
         buildLabel += "</div>"
         bpLabel += buildLabel
-        if c % 5 == 0 and c != 0:
+        if c % 6 == 0 and c != 0:
             bpLabel += "<div class='break'></div>"
         c += 1
     bpLabel += endLabel
