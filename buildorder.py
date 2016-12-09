@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# version 0.8
+# version 1.5
 """
 Strategy: Build an html page containing orders for Discoveries - Egyptian Imports, from a JSON file.
             take in JSON order form, and create a view-file in html - styled inline.
@@ -241,7 +241,7 @@ def makeLabels(json):
 
     sortedjson = sorted(json, key=lambda k: k['itemsort'])
     
-    bpLabel = "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><title></title><style>div.label{float:left; font-size: 12pt; margin-right: 10px; margin-bottom: -10px; height: 100px; width: 1in; overflow: hidden; white-space: nowrap} div.break{clear:both;} </style></head><body>"
+    bpLabel = "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><title></title><style>div.label{float:left; font-size: 12pt; margin-right: 10px; margin-left: 10px margin-bottom: -10px; height: 100px; width: 1in; overflow: hidden; white-space: nowrap} div.break{clear:both;} </style></head><body>"
     endLabel = "</body></html>"
 
     c = 1
