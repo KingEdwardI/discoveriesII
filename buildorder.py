@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# version 1.5
+# version 1.6
 """
 Strategy: Build an html page containing orders for Discoveries - Egyptian Imports, from a JSON file.
             take in JSON order form, and create a view-file in html - styled inline.
@@ -40,8 +40,6 @@ bandTypes = ['ring','bracelet','ring band', 'band']
 def main():
     orderJSON = readJSON(jsonIn)
     writeHTML(orderJSON)
-    #  makeHTML(orderJSON)
-    #  makeLabels(orderJSON)
 
 def getOrderNums(json):
     """
@@ -96,13 +94,13 @@ def makeOneSided(json):
 
     # loop through items in the json file and create unique identifers for each item that is oneSided. (this does not have to be sorted)
     for item in json:
-        if not any(item['type'].lower() in s for s in bandTypes) and item['attr1'].lower().replace(' ','') != '2sided':
+        if not any(item['type'].lower() in s for s in bandTypes) and item['attr1'].lower().replace(' ','') != '2sided' and item['type'].lower() != 'chain':
             itemOneSided[unidecode(item['itemsort'])] = []
 
     # loop through the items and create an html string of the item
     for item in json:
         # todo: need to use itemOneSided for this
-        if not any(item['type'].lower() in s for s in bandTypes) and item['attr1'].lower().replace(' ', '') != '2sided':
+        if not any(item['type'].lower() in s for s in bandTypes) and item['attr1'].lower().replace(' ', '') != '2sided' and item['type'].lower() != 'chain':
             # item opening tags
             buildItem = "<div class='item oneSided'><table class='itemSymbols'><tbody>"
             # loop through the characters in side1symb
@@ -141,13 +139,13 @@ def makeTwoSided(json):
 
     # loop through items in the json file and create unique identifers for each item that is twoSided. (this does not have to be sorted)
     for item in json:
-        if not any(item['type'].lower() in s for s in bandTypes) and item['attr1'].lower().replace(' ', '') == '2sided':
+        if not any(item['type'].lower() in s for s in bandTypes) and item['attr1'].lower().replace(' ', '') == '2sided' and item['type'].lower() != 'chain':
             itemTwoSided[item['itemsort']] = []
 
     # loop through the items and create the html entry for twoSided items
     for item in json:
         # todo: need to use itemTwoSided in this...
-        if not any(item['type'].lower() in s for s in bandTypes) and item['attr1'].lower().replace(' ', '') == '2sided':
+        if not any(item['type'].lower() in s for s in bandTypes) and item['attr1'].lower().replace(' ', '') == '2sided' and item['type'].lower() != 'chain':
             # ceate wrapper for these items
             buildItem = "<div class='item twoSided'><table class='itemSymbols'><tbody>"
             # if the first side is longer than the second (or vice versa) need to print all characters of each side
@@ -215,7 +213,7 @@ def makeBand(json):
                 # create a data column for that character
                 buildItem += "<td class='symbol " + item['side1lang'].lower() + "'>" + letter.upper() + "</td>"
             # close the data
-            buildItem += "<td class='blank'></td>"
+            buildItem += "<td class='blank' style='width:25px'></td>"
 
            # create the size column for each item if it exists (this should be printed next to the characters)
             if item['size'] != '':
@@ -226,7 +224,7 @@ def makeBand(json):
             # close item characters, and begin item description
             buildItem += "</tbody></table></div><div class='itemDescription'>"
             # create the itemDescription, to be printed horizontally along the bottom
-            buildItem += "<div class='description'>" + item['itemnum'] + item['custnum'] + ' | ' + item['label'] + " "
+            buildItem += "<div class='description'>" + item['itemnum'] + ' ' + item['custnum'] + ' | ' + item['label'] + " "
             # add the order number and close all divs
             buildItem += str(item['ordernum']) + "</div></div></div>"
             itemBand[item['itemsort']].append(buildItem)
