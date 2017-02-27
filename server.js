@@ -29,7 +29,7 @@ var PORT = 8000;
 app.post('/uploads', type,
   (req,res,next) => {
     var uploadfile = req.file.filename; // unique identifier for uploaded file
-    var finalfile = req.file.originalname; // final filename to be written
+    var finalfile = req.file.originalname.replace('.csv', '').replace(' ', '_'); // final filename to be written
     
     var csvtojson = new csvToJson({});
     csvtojson.fromFile("./uploads/" + uploadfile, (err, result) => { // read from csv file and convert to json

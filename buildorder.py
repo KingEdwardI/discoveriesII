@@ -122,7 +122,10 @@ def makeOneSided(json):
             buildItem += str(item['ordernum']) + "<br></div></div></div>"
             identifier = item['itemsort']
             # create a dict-list entry for that identifier
-            itemOneSided[unidecode(identifier)].append(buildItem)
+            try:
+                itemOneSided[unidecode(identifier)].append(buildItem)
+            except KeyError:
+                pass
 
     return itemOneSided
 
@@ -182,7 +185,10 @@ def makeTwoSided(json):
             # add in the ordernum
             buildItem += str(item['ordernum']) + "<br></div></div></div>"
             # add to the dict
-            itemTwoSided[item['itemsort']].append(buildItem)
+            try:
+                itemTwoSided[item['itemsort']].append(buildItem)
+            except KeyError:
+                pass
 
     return itemTwoSided
 
