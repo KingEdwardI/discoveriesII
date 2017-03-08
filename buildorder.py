@@ -243,6 +243,8 @@ def makeLabels(json):
     for item in json:
         if any(item['type'].lower() in s for s in bandTypes): 
             item['itemsort'] = 'z' + item['itemsort']
+        if item['type'].lower() == 'chain':
+            item['itemsort'] = 'zzz' + item['itemsort']
 
     sortedjson = sorted(json, key=lambda k: k['itemsort'])
     
