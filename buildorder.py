@@ -54,6 +54,7 @@ def getOrderNums(json):
     # loop through items in json file
     for item in json:
         # create a unique identifier for each item and append 'z' if it's a band for sorting in the future
+        print item
         if any(item['type'].lower() in s for s in bandTypes): 
             identifier = "z" + item['itemsort'].lower()
         # if the jewelery is not in the bandTypes array, create unique ID for each item
@@ -248,21 +249,25 @@ def makeLabels(json):
     bpLabel = "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><title></title><style>div.label{float:left; font-size: 12pt; margin-right: 10px; margin-left: 10px margin-bottom: -10px; height: 100px; width: 1in; overflow: hidden; white-space: nowrap} div.break{clear:both;} </style></head><body>"
     endLabel = "</body></html>"
 
-    c = 1
+    lineBreak = 1
+    pageBreak = 1
     for item in sortedjson:
         buildLabel = ""
         buildLabel += "<div class='label'>"
-        buildLabel += "<span>" + str(item['label']) + "</span> <br>"
-        buildLabel += "<span>" + str(item['itemnum']) + "</span> <br>"
-        buildLabel += "<span>" + str(item['ordernum']) + "</span> <br>"
+        buildLabel += "<span>" + str(item['label']) + "</span> <br/>"
+        buildLabel += "<span>" + str(item['itemnum']) + "</span> <br/>"
+        buildLabel += "<span>" + str(item['ordernum']) + "</span> <br/>"
         buildLabel += "<span>" + str(item['custnum']) + " "
-        buildLabel += str(item['batchnum']) + "</span> <br>"
+        buildLabel += str(item['batchnum']) + "</span> <br/>"
         buildLabel += "<span>Made in Egypt</span>"
         buildLabel += "</div>"
         bpLabel += buildLabel
-        if c % 6 == 0 and c != 0:
+        if lineBreak % 6 == 0 and lineBreak != 0:
             bpLabel += "<div class='break'></div>"
-        c += 1
+        if pageBreak % 54 == 0 and pageBreak != 0:
+            bpLabel += "<div class='break'><br/><br/><br/><br/></div>"
+        pageBreak += 1
+        lineBreak += 1
     bpLabel += endLabel
 
     return bpLabel
