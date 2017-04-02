@@ -31,6 +31,8 @@ import json
 import sys
 from unidecode import unidecode
 
+import pprint
+pp = pprint.PrettyPrinter(indent=4)
 jsonIn = sys.argv[1] # input json
 orderOut = sys.argv[2] # output html for orders
 labelOut = sys.argv[3] # output html for labels
@@ -54,7 +56,6 @@ def getOrderNums(json):
     # loop through items in json file
     for item in json:
         # create a unique identifier for each item and append 'z' if it's a band for sorting in the future
-        print item
         if any(item['type'].lower() in s for s in bandTypes): 
             identifier = "z" + item['itemsort'].lower()
         # if the jewelery is not in the bandTypes array, create unique ID for each item
@@ -150,43 +151,43 @@ def makeTwoSided(json):
     for item in json:
         # todo: need to use itemTwoSided in this...
         if not any(item['type'].lower() in s for s in bandTypes) and item['attr1'].lower().replace(' ', '') == '2sided' and item['type'].lower() != 'chain':
-            # ceate wrapper for these items
-            buildItem = "<div class='item twoSided'><table class='itemSymbols'><tbody>"
-            # if the first side is longer than the second (or vice versa) need to print all characters of each side
-            if len(item['side1symb']) > len(item['side2symb']):
+            
+            buildItem = "<div class='item twoSided'><table class='itemSymbols'><tbody>" # ceate wrapper for these items
+            
+            if len(item['side1symb']) > len(item['side2symb']): # if the first side is longer than the second (or vice versa) need to print all characters of each side
                 length = len(item['side1symb'])
-                # build the each side
-                for i in range(length):
+                
+                for i in range(length): # build the each side
                     buildItem += "<tr><td class='side1 symbol " + item['side1lang'].lower() + "'>" + item['side1symb'][i].upper() + "</td>"
-                    # try to build the second side
-                    try:
+                    
+                    try: # try to build the second side
                         buildItem += "<td class='side2 symbol " + item['side2lang'].lower() + "'>" + item['side2symb'][i].upper() + "</td></tr>"
-                    # if the second side has less characters add an empty table data
-                    except IndexError:
+                    
+                    except IndexError: # if the second side has less characters add an empty table data
                         buildItem += "<td class='side2 symbol'> </td>"
             else:
                 length = len(item['side2symb'])
-                # build the each side
-                for i in range(length):
-                    # try to build the first side
-                    try:
-                        # add a class for the items first side characters, create the row>data for that character
-                        buildItem += "<tr><td class='side1 symbol " + item['side1lang'].lower() + "'>" + item['side1symb'][i].upper() + "</td>"
-                    # if the first side does not have a character, add an empty table data
-                    except IndexError:
+                
+                for i in range(length): # build the each side
+                   
+                    try: # try to build the first side
+                       
+                        buildItem += "<tr><td class='side1 symbol " + item['side1lang'].lower() + "'>" + item['side1symb'][i].upper() + "</td>" # add a class for the items first side characters, create the row>data for that character
+                   
+                    except IndexError: # if the first side does not have a character, add an empty table data
                         buildItem += "<td class='side1 symbol'> </td>"
-                    # add a class for the items second side characters, create the row>data for that character and close row
-                    buildItem += "<td class='side2 symbol " + item['side2lang'].lower() + "'>" + item['side2symb'][i].upper() + "</td></tr>"
-            # close table with characters and start building that items description
-            buildItem += "</tbody></table><div class='itemDescription'>"
-            # add that items size
-            buildItem += "<div class='size arabic'><img src='.img/" + str(item['size']).lower() + ".jpg'></div>"
-            # add in that items number
-            buildItem += "<div class='description'>" + item['itemnum'] + "<br>" + item['custnum'] + ' | ' + item['label'] + "<br>"
-            # add in the ordernum
-            buildItem += str(item['ordernum']) + "<br></div></div></div>"
-            # add to the dict
-            try:
+                   
+                    buildItem += "<td class='side2 symbol " + item['side2lang'].lower() + "'>" + item['side2symb'][i].upper() + "</td></tr>" # add a class for the items second side characters, create the row>data for that character and close row
+           
+            buildItem += "</tbody></table><div class='itemDescription'>" # close table with characters and start building that items description
+           
+            buildItem += "<div class='size arabic'><img src='.img/" + str(item['size']).lower() + ".jpg'></div>" # add that items size
+           
+            buildItem += "<div class='description'>" + item['itemnum'] + "<br>" + item['custnum'] + ' | ' + item['label'] + "<br>" # add in that items number
+           
+            buildItem += str(item['ordernum']) + "<br></div></div></div>" # add in the ordernum
+           
+            try: # add to the dict
                 itemTwoSided[item['itemsort']].append(buildItem)
             except KeyError:
                 pass
@@ -342,7 +343,7 @@ def makeHTML(json):
         for twoSided in twoSideds:
             t = 0
             # check if the item matches the order
-            if twoSided.lower() in key.lower():
+            if twoSided.lower() == key.lower():
                 # add a line break for the first item
                 html += "<div class='break'></div>"
                 #  add the first order 
@@ -371,7 +372,7 @@ def makeHTML(json):
         # loop through band items
         for band in bands:
             # if the item matches the order
-            if band.lower() in key.lower():
+            if band.lower() == key.lower():
                 # loop through the items
                 for item in bands[band]:
                     # add that order and the item for that order
