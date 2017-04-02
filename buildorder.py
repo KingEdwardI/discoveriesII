@@ -312,7 +312,7 @@ def makeHTML(json):
         for oneSided in oneSideds:
             o = 0 # for counting items
             # check if the item matches the order
-            if oneSided.lower() == key.lower():
+            if oneSided.lower() == key.lower(): # use '==' because we want it to match exactly
                 # add a line break for the first item
                 html += "<div class='break'></div>"
                 #  add the first order 
@@ -343,7 +343,7 @@ def makeHTML(json):
         for twoSided in twoSideds:
             t = 0
             # check if the item matches the order
-            if twoSided.lower() == key.lower():
+            if twoSided.lower() == key.lower(): # use '==' because we want it to match directly
                 # add a line break for the first item
                 html += "<div class='break'></div>"
                 #  add the first order 
@@ -372,7 +372,7 @@ def makeHTML(json):
         # loop through band items
         for band in bands:
             # if the item matches the order
-            if band.lower() == key.lower():
+            if band.lower() in key.lower(): # use a 'if in' because the band value will have a 'z' leading character
                 # loop through the items
                 for item in bands[band]:
                     # add that order and the item for that order
