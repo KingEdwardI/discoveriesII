@@ -267,8 +267,8 @@ def makeLabels(json):
         bpLabel += buildLabel
         if lineBreak % 6 == 0 and lineBreak != 0:
             bpLabel += "<div class='break'></div>"
-        if pageBreak % 54 == 0 and pageBreak != 0:
-            bpLabel += "<div class='break'><br/><br/><br/><br/></div>"
+        if pageBreak % 60 == 0 and pageBreak != 0:
+            bpLabel += "<div class='break'><br/><br/></div>"
         pageBreak += 1
         lineBreak += 1
     bpLabel += endLabel
